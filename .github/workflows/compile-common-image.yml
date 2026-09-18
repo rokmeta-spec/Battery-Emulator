@@ -108,7 +108,10 @@ jobs:
     - name: Insert cache check debugging
       run: |
         sed -i "/if line\.split.*expected_hash:/i \                print('Hash check, sdkconfig has:', line.split(\"__\")[1].strip(), 'was expecting:', expected_hash, 'data is:', repr(custom_options.strip() + mcu))" ~/.platformio/platforms/espressif32/builder/frameworks/arduino.py || echo "sed failed"
-
+    - name: Prepare pioarduino environment
+    run: |
+      pio pkg install -e ${{ matrix.pio_env }}
+     ~/.platformio/penv/bin/python -m pip install --upgrade "platformio==6.1.19"
     - name: Build image for ${{ matrix.board_name }}
       shell: bash
       env:
