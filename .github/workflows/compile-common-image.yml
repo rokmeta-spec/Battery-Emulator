@@ -103,7 +103,10 @@ jobs:
     - name: Install PlatformIO Core
       #run: pip install --upgrade platformio
       run: pip install --upgrade "platformio==6.1.19" # fix for No module named 'SCons.Tool.FortranCommon'
-    # Add a line to print out the hash check values, to help debug why
+    - name: Check PlatformIO version
+      run: |
+        which pio
+        pio --version
     # PlatformIO might trigger a rebuild.
     - name: Insert cache check debugging
       run: |
