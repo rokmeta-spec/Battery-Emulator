@@ -103,8 +103,6 @@ jobs:
     - name: Install PlatformIO Core
       #run: pip install --upgrade platformio
       run: pip install --upgrade "platformio==6.1.19" # fix for No module named 'SCons.Tool.FortranCommon'
-    - name: Pin PlatformIO in internal environment
-      run: ~/.platformio/penv/bin/pip install --upgrade "platformio==6.1.19"
     # Add a line to print out the hash check values, to help debug why
     # PlatformIO might trigger a rebuild.
     - name: Insert cache check debugging
