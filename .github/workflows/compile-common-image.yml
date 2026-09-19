@@ -119,9 +119,17 @@ jobs:
         GITHUB_PR: ${{ github.event.pull_request.number }}
         GITHUB_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
       run: |
-        set -o pipefail
-        pio run -e ${{ matrix.pio_env }} 2>&1 | tee checkprogsize.txt
-
+       set +e
+       set -o pipefail
+       pio run -e ${{ matrix.pio_env }} 2>&1 | tee checkprogsize.txt
+       rc=${PIPESTATUS[0]}
+       echo "=== PENV DIAGNOSTICS ==="
+       ls -la ~/.platformio/penv/bin || true
+       ~/.platformio/penv/bin/python --version || true
+       ~/.platformio/penv/bin/python -m pip --version || true
+       ~/.platformio/penv/bin/python -c "import SCons; print('SCons:', SCons.__version__, SCons.__file__)" || true
+       ~/.platformio/penv/bin/python -c "import SCons.Tool.FortranCommon; print('FortranCommon OK')" || true
+       exit $rc
     - name: Capture size report for ${{ matrix.board_name }}
       run: |
         cat checkprogsize.txt | python .github/scripts/parse_size.py \
