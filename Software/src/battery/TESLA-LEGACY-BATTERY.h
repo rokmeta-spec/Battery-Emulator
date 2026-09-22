@@ -15,7 +15,7 @@ class TeslaLegacyBattery : public CanBattery {
 
  private:
   static const int MAX_PACK_VOLTAGE_60_DV = 5000;  //TODO, set
-  static const int MIN_PACK_VOLTAGE_60_DV = 2800;
+  static const int MIN_PACK_VOLTAGE_60_DV = 2400;
   static const int MAX_PACK_VOLTAGE_70_DV = 5000;  //TODO, set
   static const int MIN_PACK_VOLTAGE_70_DV = 3000;
   static const int MAX_PACK_VOLTAGE_75_DV = 5000;  //TODO, set
