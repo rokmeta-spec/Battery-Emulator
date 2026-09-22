@@ -100,16 +100,23 @@ jobs:
       with:
         python-version: '3.13'
 
-    - name: Install PlatformIO Core
-      #run: pip install --upgrade platformio
-      run: pip install --upgrade "platformio==6.1.19" # fix for No module named 'SCons.Tool.FortranCommon'
-
-    # Add a line to print out the hash check values, to help debug why
+    - name: Install pioarduino Core
+      # The platform also uses penv for HybridCompile. Keep both builds on the
+      # Core version that matches the platform's SCons 4.8.1 requirement.
+      run: |
+        python -m venv "$HOME/.platformio/penv"
+        "$HOME/.platformio/penv/bin/python" -m pip install "pioarduino==6.1.19"
+        echo "$HOME/.platformio/penv/bin" >> "$GITHUB_PATH"
+    - name: Check PlatformIO version
+      run: |
+        which pio
+        pio --version
+        python -m pip show pioarduino
     # PlatformIO might trigger a rebuild.
     - name: Insert cache check debugging
       run: |
         sed -i "/if line\.split.*expected_hash:/i \                print('Hash check, sdkconfig has:', line.split(\"__\")[1].strip(), 'was expecting:', expected_hash, 'data is:', repr(custom_options.strip() + mcu))" ~/.platformio/platforms/espressif32/builder/frameworks/arduino.py || echo "sed failed"
-
+    
     - name: Build image for ${{ matrix.board_name }}
       shell: bash
       env:
